@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm-run-all --parallel serve ngrok",
-    "serve": "vite",
+    "serve": "vite --port 5173",
     "ngrok": "ngrok http 5173",
     "build": "tsc && vite build",
     "preview": "vite preview"
