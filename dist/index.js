@@ -36,13 +36,14 @@ export class CallAppBuilder {
     IosFallbackUrl;
     quene = [];
     isLeave = false;
+    _fallback;
+    onEnd;
     isMobile = false;
     isAndroid = false;
     isIOS = false;
     system;
     systemVersion;
-    _fallback;
-    constructor({ parallelInterval = 200, supportTablet = false, PcFallbackUrl, AndroidFallbackUrl, IosFallbackUrl, fallback, } = {}) {
+    constructor({ parallelInterval = 500, supportTablet = false, PcFallbackUrl, AndroidFallbackUrl, IosFallbackUrl, } = {}) {
         if (typeof window === "undefined")
             throw new Error("This method can only be used on browsers");
         const md = new MobileDetect(window.navigator.userAgent);
@@ -51,7 +52,6 @@ export class CallAppBuilder {
         this.PcFallbackUrl = PcFallbackUrl;
         this.AndroidFallbackUrl = AndroidFallbackUrl;
         this.IosFallbackUrl = IosFallbackUrl;
-        this._fallback = fallback;
         const isMobile = md.mobile() !== null;
         const isTablet = md.tablet() !== null;
         this.isMobile = this.supportTablet ? isMobile || isTablet : isMobile;
@@ -108,6 +108,14 @@ export class CallAppBuilder {
         this.quene.push(useLink(link));
         return this;
     }
+    setFallback(fallback) {
+        this._fallback = fallback;
+        return this;
+    }
+    setEnd(onEnd) {
+        this.onEnd = onEnd;
+        return this;
+    }
     fallback() {
         if (this._fallback) {
             this._fallback();
@@ -142,10 +150,12 @@ export class CallAppBuilder {
     }
     walk() {
         const uri = this.quene.shift();
-        if (this.isLeave)
+        if (this.isLeave) {
+            this.onEnd?.();
             return;
+        }
         if (!uri) {
-            !this.isLeave && this.fallback();
+            this.fallback();
             return;
         }
         try {
@@ -170,8 +180,8 @@ export class CallAppBuilder {
         }
     }
     listenIsJump() {
-        document.addEventListener("visibilitychange", this.visibilitychange);
-        window.addEventListener("pagehide", this.pageHide);
+        document.addEventListener("visibilitychange", this.visibilitychange.bind(this));
+        window.addEventListener("pagehide", this.pageHide.bind(this));
     }
 }
 export * from "./type";

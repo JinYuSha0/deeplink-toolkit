@@ -10,13 +10,14 @@ export declare class CallAppBuilder {
     private IosFallbackUrl?;
     private quene;
     private isLeave;
+    private _fallback?;
+    private onEnd?;
     isMobile: boolean;
     isAndroid: boolean;
     isIOS: boolean;
     system?: string;
     systemVersion?: number;
-    _fallback?: () => void;
-    constructor({ parallelInterval, supportTablet, PcFallbackUrl, AndroidFallbackUrl, IosFallbackUrl, fallback, }?: CallAppBuilderConstuctParams);
+    constructor({ parallelInterval, supportTablet, PcFallbackUrl, AndroidFallbackUrl, IosFallbackUrl, }?: CallAppBuilderConstuctParams);
     /**
      * No limit
      * @param scheme
@@ -34,6 +35,8 @@ export declare class CallAppBuilder {
      * @param link
      */
     setLink(link: Link): this;
+    setFallback(fallback: () => void): this;
+    setEnd(onEnd: () => void): this;
     fallback(): void;
     build(): () => void;
     execute(): void;

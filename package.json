@@ -1,6 +1,6 @@
 {
   "name": "deeplink-toolkit",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "DeepLink toolkit",
   "main": "./dist/index.js",
   "files": [

@@ -62,21 +62,21 @@ export class CallAppBuilder {
   private IosFallbackUrl?: string;
   private quene: string[] = [];
   private isLeave: boolean = false;
+  private _fallback?: () => void;
+  private onEnd?: () => void;
 
   public isMobile: boolean = false;
   public isAndroid: boolean = false;
   public isIOS: boolean = false;
   public system?: string;
   public systemVersion?: number;
-  public _fallback?: () => void;
 
   constructor({
-    parallelInterval = 200,
+    parallelInterval = 500,
     supportTablet = false,
     PcFallbackUrl,
     AndroidFallbackUrl,
     IosFallbackUrl,
-    fallback,
   }: CallAppBuilderConstuctParams = {}) {
     if (typeof window === "undefined")
       throw new Error("This method can only be used on browsers");
@@ -86,7 +86,6 @@ export class CallAppBuilder {
     this.PcFallbackUrl = PcFallbackUrl;
     this.AndroidFallbackUrl = AndroidFallbackUrl;
     this.IosFallbackUrl = IosFallbackUrl;
-    this._fallback = fallback;
 
     const isMobile = md.mobile() !== null;
     const isTablet = md.tablet() !== null;
@@ -154,6 +153,16 @@ export class CallAppBuilder {
     return this;
   }
 
+  setFallback(fallback: () => void) {
+    this._fallback = fallback;
+    return this;
+  }
+
+  setEnd(onEnd: () => void) {
+    this.onEnd = onEnd;
+    return this;
+  }
+
   fallback() {
     if (this._fallback) {
       this._fallback();
@@ -191,9 +200,12 @@ export class CallAppBuilder {
 
   private walk() {
     const uri = this.quene.shift();
-    if (this.isLeave) return;
+    if (this.isLeave) {
+      this.onEnd?.();
+      return;
+    }
     if (!uri) {
-      !this.isLeave && this.fallback();
+      this.fallback();
       return;
     }
     try {
@@ -219,8 +231,11 @@ export class CallAppBuilder {
   }
 
   private listenIsJump() {
-    document.addEventListener("visibilitychange", this.visibilitychange);
-    window.addEventListener("pagehide", this.pageHide);
+    document.addEventListener(
+      "visibilitychange",
+      this.visibilitychange.bind(this)
+    );
+    window.addEventListener("pagehide", this.pageHide.bind(this));
   }
 }
 
