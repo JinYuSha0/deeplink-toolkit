@@ -1,4 +1,5 @@
 node_modules
+*.lock
 
 # Editor directories and files
 .vscode/*
