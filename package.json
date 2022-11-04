@@ -1,0 +1,31 @@
+{
+  "name": "deeplink-toolkit",
+  "version": "0.0.1",
+  "description": "DeepLink toolkit",
+  "main": "./dist/index.js",
+  "files": [
+    "./dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JinYuSha0/deeplink-toolkit",
+    "baseUrl": "https://github.com/JinYuSha0/deeplink-toolkit"
+  },
+  "keywords": [
+    "deeplink"
+  ],
+  "author": {
+    "name": "Soul",
+    "email": "a1009943858@gmail.com"
+  },
+  "scripts": {
+    "dev": "tsc -watch"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "mobile-detect": "^1.4.5"
+  }
+}
