@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { CallAppBuilder, useScheme } from "deepLink-toolkit";
+import { CallAppBuilder } from "deeplink-toolkit";
 
 const App: React.FC<{}> = (props) => {
   const openMarket = useCallback(() => {
