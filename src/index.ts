@@ -193,7 +193,7 @@ export class CallAppBuilder {
     const uri = this.quene.shift();
     if (this.isLeave) return;
     if (!uri) {
-      this.fallback();
+      !this.isLeave && this.fallback();
       return;
     }
     try {

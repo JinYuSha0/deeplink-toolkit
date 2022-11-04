@@ -145,7 +145,7 @@ export class CallAppBuilder {
         if (this.isLeave)
             return;
         if (!uri) {
-            this.fallback();
+            !this.isLeave && this.fallback();
             return;
         }
         try {
